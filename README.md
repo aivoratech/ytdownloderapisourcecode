@@ -1,164 +1,116 @@
-# 🚀 YouTube Video Download API (Web Scraping)
+# 🚀 Video Downloader API (Web Scraping)
 
 **Developer:** @anshapi
-**Language:** Python (Flask)
-**Deploy:** Vercel (Serverless)
+**Platform:** Render (Python Web Service)
+**Tech:** Flask + Requests (Pure Web Scraping)
 
 ---
 
-## 📌 About This Project
+## 📌 Project Overview
 
-This project is a **YouTube / Video Download API** built using **web scraping logic**.
-It does **NOT** directly download videos from YouTube servers. Instead, it:
+This API extracts **video & audio download links** using **web scraping only** (no yt-dlp, no binaries).
 
-* Scrapes a third‑party search page
-* Extracts **encrypted download URLs**
-* Decrypts them using a helper service
-* Returns **best video, best audio, and all formats** in clean JSON
+It works by:
 
-⚠️ This project is for **educational purposes only**.
+* Scraping a third‑party search page
+* Extracting **encrypted URLs** from HTML
+* Decrypting them via helper endpoint
+* Returning **best video, best audio & all formats** in JSON
 
----
-
-## 🔥 Features
-
-* ✅ Serverless Flask API (Vercel ready)
-* 🔐 Encrypted URL decryption
-* 🎵 Best audio detection
-* 🎥 Best video quality detection (by file size)
-* 🚫 No‑watermark video detection (if available)
-* 🌐 CORS enabled
-* 📦 Clean JSON response
+⚠️ Educational purpose only.
 
 ---
 
-## 🧠 How It Works (High Level)
+## ✨ Features
+
+* ✅ Pure web scraping (requests + regex)
+* ✅ Best video selection (by size)
+* ✅ Best audio selection
+* ✅ No-watermark detection (if available)
+* ✅ Render deployable (long‑running service)
+* ✅ CORS enabled
+
+---
+
+## 🔁 Flowchart (How It Works)
 
 ```
-User URL
-   ↓
-API Endpoint (/download)
-   ↓
-Scrape Search Page HTML
-   ↓
+User Video URL
+      ↓
+/download endpoint
+      ↓
+Fetch Search Page HTML
+      ↓
 Extract Encrypted Links (#url=)
-   ↓
+      ↓
 Decrypt Each Link
-   ↓
-Filter Audio / Video
-   ↓
+      ↓
+Audio / Video Filter
+      ↓
+HEAD request → file size
+      ↓
 Pick Best Quality
-   ↓
+      ↓
 Return JSON Response
 ```
 
 ---
 
-## 📊 Detailed Flowchart
-
-```
-┌──────────────┐
-│   USER URL   │
-└──────┬───────┘
-       ↓
-┌────────────────────┐
-│  /download API     │
-└──────┬─────────────┘
-       ↓
-┌──────────────────────────┐
-│ Scrape Search Page HTML  │
-│ videofk.com/search       │
-└──────┬───────────────────┘
-       ↓
-┌──────────────────────────┐
-│ Extract Encrypted Links  │
-│ href="#url=XXXX"        │
-└──────┬───────────────────┘
-       ↓
-┌──────────────────────────┐
-│ Decrypt Encrypted URL    │
-│ downloader.twdown.online │
-└──────┬───────────────────┘
-       ↓
-┌──────────────────────────┐
-│ Audio / Video Detection  │
-└──────┬───────────────────┘
-       ↓
-┌──────────────────────────┐
-│ HEAD Request (Size)      │
-│ Pick Best Quality        │
-└──────┬───────────────────┘
-       ↓
-┌──────────────────────────┐
-│ JSON Response to Client  │
-└──────────────────────────┘
-```
-
----
-
-## 🧩 API Endpoints
+## 🔗 API Endpoints
 
 ### 🔹 GET `/download?url=VIDEO_URL`
 
-Returns **full media details + direct links**
-
-```json
-{
-  "success": true,
-  "title": "Video Title",
-  "video_best": {},
-  "audio_best": {},
-  "media": []
-}
-```
-
----
+Returns full data + direct links
 
 ### 🔹 GET `/info?url=VIDEO_URL`
 
-Returns **only information** (no direct links)
+Returns only metadata (no direct URLs)
 
-```json
-{
-  "success": true,
-  "title": "Video Title",
-  "formats": 5,
-  "has_video": true,
-  "has_audio": true,
-  "qualities": ["360p", "720p"]
-}
-```
+### 🔹 GET `/direct/{type}?url=ENCRYPTED`
+
+Decrypt a single encrypted URL
 
 ---
 
-## 🗂 Project Structure
+## 📂 Project Structure
 
 ```
-yt-download-api/
-├── api/
-│   └── index.py
+project/
+├── app.py
 ├── requirements.txt
-├── vercel.json
+├── Procfile
 └── README.md
 ```
 
 ---
 
-## 🚀 Deploy on Vercel
+## 🚀 Deploy on Render (Step‑by‑Step)
 
-1. Upload ZIP to **Vercel Dashboard**
-2. Framework: **Other**
-3. Build handled automatically
-4. Done 🎉
+1. Push this project to **GitHub**
+2. Go to **Render → New Web Service**
+3. Select your GitHub repo
+4. Environment: **Python**
+5. Build Command:
+
+```
+pip install -r requirements.txt
+```
+
+6. Start Command:
+
+```
+gunicorn app:app
+```
+
+7. Deploy 🎉
 
 ---
 
-## ⚠️ Disclaimer
+## ⚠️ Notes & Limitations
 
-* This project uses **web scraping**
-* External services may change or block requests
-* Respect **YouTube Terms of Service**
-* Use for **learning & experimentation only**
+* Web scraping sites may change HTML anytime
+* Some links may expire
+* Respect platform Terms of Service
 
 ---
 
@@ -168,9 +120,8 @@ yt-download-api/
 
 ### 🔥 @anshapi
 
-* Telegram / GitHub / API Projects
-* Follow for more **API, Bots & Scraping content**
+APIs • Bots • Scraping • Automation
 
 ---
 
-⭐ If this project helped you, give it a star and share!
+⭐ If you like this project, share & follow @anshapi
